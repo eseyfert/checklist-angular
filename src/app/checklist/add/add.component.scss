@@ -1,0 +1,29 @@
+@use '@miraidesigns/base';
+@use '@miraidesigns/helpers';
+@use '@miraidesigns/utils';
+
+.#{base.$prefix}-slide {
+	&__controls {
+		position: relative;
+		left: utils.px2rem(-16px);
+
+		.#{base.$prefix}-icon {
+			height: utils.px2rem(32px);
+			width: utils.px2rem(32px);
+		}
+	}
+
+	&__content {
+		justify-content: flex-start;
+		padding-top: utils.px2rem(24px);
+	}
+
+	&__footer {
+		@include helpers.padding(24px);
+
+		.#{base.$prefix}-button--hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+	}
+}

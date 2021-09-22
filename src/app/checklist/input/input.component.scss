@@ -1,0 +1,39 @@
+@use '@miraidesigns/base';
+@use '@miraidesigns/fx';
+@use '@miraidesigns/helpers';
+@use '@miraidesigns/theme';
+@use '@miraidesigns/utils';
+
+:host {
+	width: 100%;
+}
+
+.#{base.$prefix}-checklist-textfield {
+	display: flex;
+	align-items: center;
+
+	.#{base.$prefix}-textfield__input {
+		@include helpers.margin(0 0 16px 0);
+		@include helpers.padding(0 16px 8px 16px);
+		@include fx.animation-standard(border-color, 200ms);
+
+		background-color: transparent;
+		font-size: utils.px2rem(20px);
+		border-bottom: utils.px2rem(1px) solid var(--border, #{theme.prop('border')});
+		border-radius: 0;
+
+		&:hover {
+			border-color: var(--border-hover, #{theme.prop('border-hover')});
+			cursor: pointer;
+		}
+
+		&:focus {
+			border-color: var(--brand, #{theme.brand()});
+			border-width: utils.px2rem(2px);
+		}
+	}
+
+	.#{base.$prefix}-button {
+		align-self: flex-start;
+	}
+}

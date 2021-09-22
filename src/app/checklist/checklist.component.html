@@ -1,0 +1,138 @@
+<ng-container *ngIf="template === 'edit'; else viewTemplate">
+	<div
+		class="mdf-textfield mdf-textfield--has-helper {{
+			titleModel.invalid && (titleModel.dirty || titleModel.touched) ? 'mdf-textfield--state-error' : ''
+		}}"
+	>
+		<input
+			class="mdf-textfield__input"
+			id="checklist-title"
+			type="text"
+			name="title"
+			placeholder="Enter checklist title..."
+			value="{{ title }}"
+			required
+			[(ngModel)]="title"
+			#titleModel="ngModel"
+		/>
+
+		<div class="mdf-textfield__helper-line" *ngIf="titleModel.invalid && (titleModel.dirty || titleModel.touched)">
+			<span class="mdf-textfield__helper"> The title can't be empty </span>
+		</div>
+	</div>
+
+	<div #inputs class="mdf-container" aria-live="polite">
+		<ng-container *ngIf="tasks.length; else singleInput">
+			<div *ngFor="let task of tasks" #inputContainer class="mdf-checklist-textfield mdf-textfield">
+				<input
+					#textInput
+					class="mdf-textfield__input"
+					type="text"
+					name="task_{{ id }}"
+					value="{{ task }}"
+					(click)="textInput.focus()"
+				/>
+
+				<button
+					class="mdf-button mdf-button--icon"
+					aria-label="Remove task"
+					(click)="
+						inputsCount > 1 ? inputContainer.parentElement?.removeChild(inputContainer) : '';
+						removeTask(task);
+						add.focus()
+					"
+				>
+					<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+						<use href="/assets/images/icons.svg#delete"></use>
+					</svg>
+				</button>
+			</div>
+		</ng-container>
+
+		<ng-template #singleInput>
+			<div #inputContainer class="mdf-checklist-textfield mdf-textfield">
+				<input
+					#textInput
+					class="mdf-textfield__input"
+					type="text"
+					name="tasks"
+					placeholder="Enter your task..."
+					(click)="textInput.focus()"
+				/>
+
+				<button
+					class="mdf-button mdf-button--icon"
+					aria-label="Remove task"
+					(click)="
+						inputsCount > 1 ? inputContainer.parentElement?.removeChild(inputContainer) : '';
+						updateCount();
+						add.focus()
+					"
+				>
+					<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+						<use href="/assets/images/icons.svg#delete"></use>
+					</svg>
+				</button>
+			</div>
+		</ng-template>
+	</div>
+
+	<button #add id="add-input" class="mdf-button mdf-button--filled mdf-button--leading-icon" (click)="addInput()">
+		<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+			<use href="/assets/images/icons.svg#add"></use>
+		</svg>
+
+		Add another task
+	</button>
+</ng-container>
+
+<ng-template #viewTemplate>
+	<div class="mdf-checklist-header">
+		<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+			<use href="/assets/images/icons.svg#checklist"></use>
+		</svg>
+
+		<div class="mdf-checklist-header__content">
+			<h6 class="mdf-checklist-header__title">{{ title }}</h6>
+
+			<span class="mdf-checklist-header__meta">
+				Created {{ time | date: 'mediumDate' }} at {{ time | date: 'shortTime' }} &mdash; Tasks left:
+				{{ tasks.length - done.length }}
+			</span>
+		</div>
+	</div>
+
+	<ul class="mdf-checklist">
+		<li *ngFor="let task of tasks" #inputContainer class="mdf-checklist__item">
+			<div class="mdf-control">
+				<div class="mdf-checkbox">
+					<input
+						#checkbox
+						id="checkbox-{{ tasks.indexOf(task) + 1 }}"
+						class="mdf-checkbox__input"
+						type="checkbox"
+						checked="{{ done.includes(task) ? true : null }}"
+						(input)="
+							completeTask(task);
+							checkbox.checked ? label.classList.add('done') : label.classList.remove('done')
+						"
+					/>
+
+					<div class="mdf-checkbox__box">
+						<svg class="mdf-checkbox__check" viewBox="0 0 24 24" aria-hidden="true">
+							<use href="/assets/images/icons.svg#checkbox"></use>
+						</svg>
+					</div>
+				</div>
+
+				<label
+					#label
+					for="checkbox-{{ tasks.indexOf(task) + 1 }}"
+					class="{{ done.includes(task) ? 'done' : '' }}"
+				>
+					{{ task }}
+				</label>
+			</div>
+		</li>
+	</ul>
+</ng-template>

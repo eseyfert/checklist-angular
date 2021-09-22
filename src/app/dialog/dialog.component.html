@@ -1,0 +1,24 @@
+<div class="mdf-dialog-container" aria-hidden="true">
+	<div class="mdf-dialog" role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+		<div class="mdf-dialog__header">
+			<h2 id="dialog-title" class="mdf-dialog__title">{{ title }}</h2>
+
+			<button class="mdf-dialog__close" aria-label="Close dialog" (click)="cancel()">
+				<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+					<use href="/assets/images/icons.svg#clear"></use>
+				</svg>
+			</button>
+		</div>
+
+		<div class="mdf-dialog__content">
+			<p id="dialog-desc">{{ message }}</p>
+		</div>
+
+		<div class="mdf-dialog__actions">
+			<button class="mdf-button" (click)="cancel()">Cancel</button>
+			<button class="mdf-button" (click)="confirm()">Confirm</button>
+		</div>
+	</div>
+
+	<div class="mdf-dialog-backdrop" (click)="cancel()"></div>
+</div>

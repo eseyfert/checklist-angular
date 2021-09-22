@@ -1,0 +1,46 @@
+<ng-container #dialog></ng-container>
+
+<header class="mdf-slide__header">
+	<div class="mdf-slide__controls">
+		<button
+			id="toggle-theme"
+			class="mdf-button mdf-button--icon"
+			aria-label="Return to the previous page"
+			(click)="goBack()"
+		>
+			<svg class="mdf-icon mdf-rotate-180" viewBox="0 0 24 24" aria-hidden="true">
+				<use href="/assets/images/icons.svg#arrow-keyboard"></use>
+			</svg>
+		</button>
+	</div>
+
+	<h2 class="mdf-slide__title">Edit your <strong>checklist.</strong></h2>
+</header>
+
+<main class="mdf-slide__main">
+	<div class="mdf-slide__content">
+		<ng-container #checklist></ng-container>
+	</div>
+</main>
+
+<footer class="mdf-slide__footer">
+	<button class="mdf-button mdf-button--filled mdf-button--large mdf-button--leading-icon" (click)="saveChanges()">
+		<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+			<use href="/assets/images/icons.svg#done"></use>
+		</svg>
+
+		Save changes
+	</button>
+
+	<button
+		class="mdf-button mdf-button--large mdf-button--leading-icon"
+		(click)="deleteDialog()"
+		(keydown)="kbDeleteDialog($event)"
+	>
+		<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+			<use href="/assets/images/icons.svg#delete"></use>
+		</svg>
+
+		Delete checklist
+	</button>
+</footer>

@@ -1,0 +1,22 @@
+<div #inputContainer class="mdf-checklist-textfield mdf-textfield">
+	<input
+		#textInput
+		class="mdf-textfield__input"
+		type="text"
+		name="task-{{ id }}"
+		placeholder="Enter your task..."
+		[(ngModel)]="value"
+		(click)="textInput.focus()"
+	/>
+
+	<button
+		#removeTask
+		class="mdf-button mdf-button--icon"
+		aria-label="Remove task"
+		(click)="getCount() > 1 ? inputContainer.parentElement?.removeChild(inputContainer) : ''; updateCount()"
+	>
+		<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+			<use href="/assets/images/icons.svg#delete"></use>
+		</svg>
+	</button>
+</div>

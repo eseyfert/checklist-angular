@@ -1,0 +1,150 @@
+<header class="mdf-slide__header">
+	<h2 class="mdf-slide__title">Thoughts.</h2>
+
+	<div class="mdf-slide__controls">
+		<button
+			id="show-options"
+			class="mdf-button mdf-button--icon"
+			aria-label="Show app options"
+			(click)="openPreferences()"
+		>
+			<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+				<use href="/assets/images/icons.svg#controls"></use>
+			</svg>
+		</button>
+	</div>
+</header>
+
+<main class="mdf-slide__main">
+	<div class="mdf-slide__content {{ hasData() ? 'mdf-slide__content--top' : '' }}">
+		<ng-container *ngIf="hasData(); else welcomeMessage">
+			<div class="mdf-tabs">
+				<div class="mdf-tabs__bar mdf-tabs__bar--left">
+					<button class="mdf-tabs__tab mdf-tabs__tab--selected" role="tab" aria-selected="true">
+						<span class="mdf-tabs__content">
+							<span class="mdf-tabs__text">Open ({{ open }})</span>
+						</span>
+
+						<span class="mdf-tabs__selection"></span>
+					</button>
+
+					<button class="mdf-tabs__tab" role="tab" aria-selected="false" tabindex="-1">
+						<span class="mdf-tabs__content">
+							<span class="mdf-tabs__text">Complete ({{ complete }})</span>
+						</span>
+
+						<span class="mdf-tabs__selection"></span>
+					</button>
+				</div>
+
+				<div class="mdf-tabs__panels">
+					<div class="mdf-tabs__panel mdf-tabs__panel--active" role="tabpanel" tabindex="0">
+						<ng-container *ngIf="!open">
+							<h5 style="margin-top: 2rem; text-align: center">
+								Seems like you have no open checklists right now. <br />
+								Why not add one?
+							</h5>
+						</ng-container>
+
+						<ul class="mdf-checklist-list">
+							<ng-container *ngFor="let data of checklistData">
+								<li class="mdf-checklist-list__item" *ngIf="!data.complete">
+									<button class="mdf-button mdf-button--icon" (click)="openView(data.id!)">
+										<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+											<use href="/assets/images/icons.svg#checklist"></use>
+										</svg>
+									</button>
+
+									<div class="mdf-checklist-list__item-content" (click)="openView(data.id!)">
+										<h6 class="mdf-checklist-list__item-title">{{ data.title }}</h6>
+
+										<span class="mdf-checklist-list__item-meta">
+											Created {{ data.time | date: 'mediumDate' }} at
+											{{ data.time | date: 'shortTime' }} &mdash; Tasks left:
+											{{ data.tasks!.length - data.done!.length }}
+										</span>
+									</div>
+
+									<button class="mdf-button mdf-button--icon" (click)="openEdit(data.id!)">
+										<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+											<use href="/assets/images/icons.svg#edit"></use>
+										</svg>
+									</button>
+								</li>
+							</ng-container>
+						</ul>
+					</div>
+
+					<div class="mdf-tabs__panel" role="tabpanel" tabindex="0">
+						<ul class="mdf-checklist-list">
+							<ng-container *ngFor="let data of checklistData">
+								<li
+									#listItem
+									class="mdf-checklist-list__item mdf-checklist-list__item--complete"
+									*ngIf="data.complete"
+								>
+									<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+										<use href="/assets/images/icons.svg#done"></use>
+									</svg>
+
+									<div class="mdf-checklist-list__item-content">
+										<h6 class="mdf-checklist-list__item-title">{{ data.title }}</h6>
+
+										<span class="mdf-checklist-list__item-meta">
+											Created {{ data.time | date: 'mediumDate' }} at
+											{{ data.time | date: 'shortTime' }} &mdash; Tasks:
+											{{ data.tasks!.length }}
+										</span>
+									</div>
+
+									<button
+										class="mdf-button mdf-button--icon"
+										(click)="
+											removeChecklist(data.id!); listItem.parentElement!.removeChild(listItem)
+										"
+									>
+										<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+											<use href="/assets/images/icons.svg#delete"></use>
+										</svg>
+									</button>
+								</li>
+							</ng-container>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<button
+				id="add-checklist"
+				class="mdf-button mdf-button--filled mdf-button--icon"
+				aria-label="Add another checklist"
+				(click)="openAdd()"
+			>
+				<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
+					<use href="/assets/images/icons.svg#add"></use>
+				</svg>
+			</button>
+		</ng-container>
+
+		<ng-template #welcomeMessage>
+			<div id="landing">
+				<p id="landing-heading">
+					Welcome to <strong>Thoughts.</strong>
+					<br />
+					<span>A simple and elegant checklist app that helps you stay organized.</span>
+				</p>
+
+				<button class="mdf-button mdf-button--filled mdf-button--large" (click)="openAdd()">
+					Get started now
+				</button>
+			</div>
+		</ng-template>
+	</div>
+</main>
+
+<footer class="mdf-slide__footer">
+	<span class="mdf-copyright">
+		App lovingly created by
+		<a href="https://miraidesigns.net/" target="_blank">Mirai Designs</a>
+	</span>
+</footer>
