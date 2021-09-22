@@ -1,6 +1,6 @@
 # Thoughts.
 
-A simple and elegant checklist app that helps you stay organized.
+A simple and elegant checklist app that helps you stay organized.\
 This app is a proof of concept and not meant for production environments.
 
 ## Features
