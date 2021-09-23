@@ -15,6 +15,8 @@ import { EditComponent } from './checklist/edit/edit.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { DialogService } from './dialog.service';
 import { ViewComponent } from './checklist/view/view.component';
+import { SnackbarComponent } from './snackbar/snackbar.component';
+import { SnackbarService } from './snackbar.service';
 
 @NgModule({
 	declarations: [
@@ -28,20 +30,23 @@ import { ViewComponent } from './checklist/view/view.component';
 		EditComponent,
 		DialogComponent,
 		ViewComponent,
+		SnackbarComponent,
 	],
 	imports: [BrowserModule, AppRoutingModule, FormsModule],
 	providers: [
-		DialogComponent,
 		DialogService,
-		SlideComponent,
-		PreferencesComponent,
-		ChecklistComponent,
 		ChecklistService,
+		SnackbarService,
+		SlideComponent,
+		DialogComponent,
+		SnackbarComponent,
+		ChecklistComponent,
 		InputComponent,
-		LandingComponent,
+		AddComponent,
 		EditComponent,
+		LandingComponent,
+		PreferencesComponent,
 	],
 	bootstrap: [AppComponent],
-	entryComponents: [PreferencesComponent, AddComponent, EditComponent, InputComponent],
 })
 export class AppModule {}
