@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { AppComponent } from '../../app.component';
 import { SlideComponent } from '../../slide/slide.component';
 import { DialogService } from '../../dialog.service';
+import { SnackbarService } from '../../snackbar.service';
 import { ChecklistService } from '../../checklist.service';
 import { ChecklistData } from '../../checklist/checklist.types';
 import { SELECTOR } from '../../checklist/checklist.constants';
@@ -46,7 +47,8 @@ export class EditComponent implements OnInit, AfterViewInit, OnDestroy {
 		private app: AppComponent,
 		private slide: SlideComponent,
 		private service: ChecklistService,
-		private dialogService: DialogService
+		private dialogService: DialogService,
+		private snackbar: SnackbarService
 	) {}
 
 	ngOnInit(): void {}
@@ -113,6 +115,9 @@ export class EditComponent implements OnInit, AfterViewInit, OnDestroy {
 
 					// Return to the Landing slide.
 					this.slide.moveSlidesTo('right');
+
+					// Display snackbar message to the user.
+					this.snackbar.message('Changes successfully saved');
 				},
 			});
 		}
@@ -135,6 +140,9 @@ export class EditComponent implements OnInit, AfterViewInit, OnDestroy {
 
 				// Return to the Landing slide.
 				this.slide.moveSlidesTo('right');
+
+				// Display snackbar message to the user.
+				this.snackbar.message('Checklist successfully removed');
 			},
 		});
 	}

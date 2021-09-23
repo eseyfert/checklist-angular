@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import { SlideComponent } from '../../slide/slide.component';
+import { SnackbarService } from 'src/app/snackbar.service';
 import { ChecklistComponent } from '../checklist.component';
 import { ChecklistService } from '../../checklist.service';
 
@@ -41,7 +42,8 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 		private cdRef: ChangeDetectorRef,
 		private app: AppComponent,
 		private slide: SlideComponent,
-		private service: ChecklistService
+		private service: ChecklistService,
+		private snackbar: SnackbarService
 	) {}
 
 	ngOnInit(): void {}
@@ -109,6 +111,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 			// After the data is saved, return to the Landing.
 			complete: () => {
 				this.goBack();
+
+				// Display message to user.
+				this.snackbar.message('Checklist set as complete');
 			},
 		});
 	}

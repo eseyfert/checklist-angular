@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
 import { SlideComponent } from '../../slide/slide.component';
+import { SnackbarService } from 'src/app/snackbar.service';
 import { ChecklistService } from 'src/app/checklist.service';
 import { SELECTOR } from '../checklist.constants';
 import { ChecklistData } from '../checklist.types';
@@ -39,7 +40,8 @@ export class AddComponent implements OnInit, AfterViewInit, OnDestroy {
 		private cdRef: ChangeDetectorRef,
 		private app: AppComponent,
 		private slide: SlideComponent,
-		private service: ChecklistService
+		private service: ChecklistService,
+		private snackbar: SnackbarService
 	) {}
 
 	ngOnInit(): void {}
@@ -100,7 +102,10 @@ export class AddComponent implements OnInit, AfterViewInit, OnDestroy {
 					this.app.refreshLanding();
 
 					// Return to the Landing slide.
-					this.slide.moveSlidesTo('right');
+					this.goBack();
+
+					// Show snackbar message.
+					this.snackbar.message(`Checklist successfully added`);
 				},
 			});
 		}
