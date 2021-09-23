@@ -1,3 +1,5 @@
+<ng-container #dialog></ng-container>
+
 <header class="mdf-slide__header">
 	<h2 class="mdf-slide__title">Thoughts.</h2>
 
@@ -99,9 +101,8 @@
 
 									<button
 										class="mdf-button mdf-button--icon"
-										(click)="
-											removeChecklist(data.id!); listItem.parentElement!.removeChild(listItem)
-										"
+										(click)="deleteDialog(data.id!, listItem)"
+										(keydown)="kbDeleteDialog($event, data.id!, listItem)"
 									>
 										<svg class="mdf-icon" viewBox="0 0 24 24" aria-hidden="true">
 											<use href="/assets/images/icons.svg#delete"></use>
