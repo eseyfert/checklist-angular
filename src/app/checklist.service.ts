@@ -70,7 +70,7 @@ export class ChecklistService {
 		// Insert Checklist component and apply data if available.
 		this.checklistRef = entry.createComponent(factory);
 
-		if (this.data) {
+		if (this.data && this.data.tasks?.length) {
 			// If we have data available, pass it to the component.
 			this.checklistRef.instance.id = this.data.id!;
 			this.checklistRef.instance.title = this.data.title!;
@@ -120,6 +120,27 @@ export class ChecklistService {
 	prepare(id: number, data: ChecklistData): void {
 		this.data = data;
 		this.id = id;
+	}
+
+	/**
+	 * reset
+	 *
+	 * Reset stored data and generate new id.
+	 *
+	 * @memberof ChecklistService
+	 * @since 1.0.0
+	 */
+	reset(): void {
+		this.id = this.generateUUID();
+
+		this.data = {
+			id: this.id,
+			title: '',
+			tasks: [],
+			done: [],
+			time: Date.now(),
+			complete: false,
+		};
 	}
 
 	/**
@@ -191,19 +212,6 @@ export class ChecklistService {
 		} else {
 			return this.storage.delete(this.id!.toString());
 		}
-	}
-
-	/**
-	 * reset
-	 *
-	 * Reset stored service id and data.
-	 *
-	 * @memberof ChecklistService
-	 * @since 1.0.0
-	 */
-	reset(): void {
-		this.data = null;
-		this.id = null;
 	}
 
 	/**
