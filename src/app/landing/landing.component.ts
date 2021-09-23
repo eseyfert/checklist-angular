@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { SlideComponent } from '../slide/slide.component';
 import { PreferencesComponent } from '../preferences/preferences.component';
@@ -6,6 +7,8 @@ import { MDFTabs } from '../tabs';
 import { AddComponent } from '../checklist/add/add.component';
 import { EditComponent } from '../checklist/edit/edit.component';
 import { ViewComponent } from '../checklist/view/view.component';
+import { SnackbarService } from '../snackbar.service';
+import { DialogService } from '../dialog.service';
 import { ChecklistData } from '../checklist/checklist.types';
 import { ChecklistService } from '../checklist.service';
 
@@ -26,11 +29,22 @@ import { ChecklistService } from '../checklist.service';
 	host: { class: 'mdf-slide' },
 })
 export class LandingComponent implements OnInit, AfterViewInit {
+	@ViewChild('dialog', { read: ViewContainerRef })
+	dialog!: ViewContainerRef; // Contains the Dialog window.
+
 	@Input() checklistData: ChecklistData[] = []; // Holds all checklists.
 	@Input() complete: number = 0; // Number of complete checklists.
 	@Input() open: number = 0; // Number of open checklists.
 
-	constructor(private app: AppComponent, private slide: SlideComponent, private checklist: ChecklistService) {}
+	dialogSub!: Subscription; // Observable created from our Dialog component.
+
+	constructor(
+		private app: AppComponent,
+		private slide: SlideComponent,
+		private checklist: ChecklistService,
+		private dialogService: DialogService,
+		private snackbar: SnackbarService
+	) {}
 
 	ngOnInit(): void {
 		// On init, fill our checklist data array.
@@ -168,13 +182,54 @@ export class LandingComponent implements OnInit, AfterViewInit {
 	 * @memberof LandingComponent
 	 * @since 1.0.0
 	 */
-	removeChecklist(id: number): void {
+	removeChecklist(id: number, elem: HTMLElement): void {
 		// Delete the checklist with the given id.
 		this.checklist.delete(id).subscribe({
 			complete: () => {
 				// Once done, update the counter of complete checklists.
 				this.complete--;
+
+				// Remove the element from the DOM.
+				elem.parentElement!.removeChild(elem);
+
+				// Display snackbar message to the user.
+				this.snackbar.message('Checklist successfully removed');
 			},
 		});
+	}
+
+	/**
+	 * deleteDialog
+	 *
+	 * Shows Dialog window to confirm checklist deletion.
+	 *
+	 * @param {boolean} [keyboard=false] Whether keyboard controls are needed
+	 * @memberof EditComponent
+	 * @since 1.0.0
+	 */
+	deleteDialog(id: number, elem: HTMLElement, keyboard: boolean = false): void {
+		this.dialogSub = this.dialogService
+			.open(this.dialog, 'Delete checklist', 'Are you sure you want to delete this checklist?', keyboard)
+			.subscribe((action) => {
+				if (action === 'confirm') {
+					this.removeChecklist(id, elem);
+				}
+			});
+	}
+
+	/**
+	 * kbDeleteDialog
+	 *
+	 * Detect if the deletion Dialog was activated by keyboard input.
+	 *
+	 * @param {KeyboardEvent} $event
+	 * @memberof EditComponent
+	 * @since 1.0.0
+	 */
+	kbDeleteDialog($event: KeyboardEvent, id: number, elem: HTMLElement): void {
+		if ($event.key === 'Enter' || $event.key === ' ') {
+			$event.preventDefault();
+			this.deleteDialog(id, elem, true);
+		}
 	}
 }
