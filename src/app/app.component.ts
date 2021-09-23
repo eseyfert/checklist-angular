@@ -13,6 +13,7 @@ import {
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { PreferencesService } from './preferences.service';
+import { SnackbarService } from './snackbar.service';
 import { SlideComponent } from './slide/slide.component';
 
 /**
@@ -32,6 +33,8 @@ import { SlideComponent } from './slide/slide.component';
 	styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, AfterViewInit {
+	@ViewChild('snackbar', { read: ViewContainerRef })
+	snackbar!: ViewContainerRef; // Contains our generated Snackbar component.
 	@ViewChild('slide', { read: ViewContainerRef })
 	slides!: ViewContainerRef; // Contains our generated Slide component.
 
@@ -45,6 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 		private componentFactoryResolver: ComponentFactoryResolver,
 		private cdRef: ChangeDetectorRef,
 		private preferences: PreferencesService,
+		private snackbarService: SnackbarService,
 		private slide: SlideComponent
 	) {}
 
@@ -62,6 +66,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 		// Apply the user preferences.
 		this.applyPreferences();
+
+		// Insert the Snackbar component we'll be using App-wide.
+		this.snackbarService.insert(this.snackbar);
+
+		// Detect changes to avoid errors.
+		this.cdRef.detectChanges();
 	}
 
 	/**
